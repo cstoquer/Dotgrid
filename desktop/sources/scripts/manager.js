@@ -85,6 +85,22 @@ function Manager (client) {
   }
 
   this.toString = () => {
-    return new XMLSerializer().serializeToString(this.el)
+    // return new XMLSerializer().serializeToString(this.el)
+    let xml = ''
+
+    const bbox   = client.tool.boundingBox();
+    const width  = bbox.r - bbox.l;
+    const height = bbox.b - bbox.t;
+    const styles = client.tool.styles
+    const paths  = client.tool.paths(-bbox.l, -bbox.t)
+
+    for (var i = 0; i < LAYERS_COUNT; i++) {
+      const style = styles[i]
+      const path  = paths[i]
+      if (!path) continue;
+      xml += `<path d="${path}" style="stroke-width: ${style.thickness}; stroke-linecap: ${style.strokeLinecap}; stroke-linejoin: ${style.strokeLinejoin}; stroke: ${style.color}; fill: ${style.fill};"/>`
+    }
+
+    return `<svg xmlns="http://www.w3.org/2000/svg" baseProfile="full" version="1.1" width="${width}px" height="${height}px">${xml}</svg>`
   }
 }

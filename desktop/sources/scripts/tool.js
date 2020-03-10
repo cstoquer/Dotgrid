@@ -257,12 +257,38 @@ function Tool (client) {
     return this.vertices.length >= this.reqs[type]
   }
 
-  this.paths = function () {
+  this.paths = function (x = 0, y = 0) {
     var layers = [];
     for (var i = 0; i < LAYERS_COUNT; i++) {
-      layers.push(new Generator(client.tool.layers[i], client.tool.styles[i]).toString({ x: 0, y: 0 }, 1));
+      layers.push(new Generator(client.tool.layers[i], client.tool.styles[i]).toString({ x, y }, 1));
     }
     return layers
+  }
+
+  this.boundingBox = function () {
+    let l =  Infinity
+    let r = -Infinity
+    let t =  Infinity
+    let b = -Infinity
+
+    for (let i = 0; i < LAYERS_COUNT; i++) {
+      const layer = this.layers[i]
+      const thickness = this.styles[i].thickness / 2
+      for (let s = 0; s < layer.length; s++) {
+        const vertices = layer[s].vertices
+        for (let v = 0; v < vertices.length; v++) {
+          const vertex = vertices[v]
+          const x = vertex.x
+          const y = vertex.y
+          if (x - thickness < l) l = x - thickness;
+          if (x + thickness > r) r = x + thickness;
+          if (y - thickness < t) t = y - thickness;
+          if (y + thickness > b) b = y + thickness;
+        }
+      }
+    }
+
+    return { l, r, t, b }
   }
 
   this.path = function () {
