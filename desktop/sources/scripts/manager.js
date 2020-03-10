@@ -89,6 +89,7 @@ function Manager (client) {
     let xml = ''
 
     const bbox   = client.tool.boundingBox();
+    // TODO: process mirrors
     const width  = bbox.r - bbox.l;
     const height = bbox.b - bbox.t;
     const styles = client.tool.styles
