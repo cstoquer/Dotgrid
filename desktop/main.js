@@ -24,6 +24,8 @@ app.on('ready', () => {
     webPreferences: { zoomFactor: 1.0, nodeIntegration: true, backgroundThrottling: false }
   })
 
+  app.win.webContents.openDevTools({ mode: 'detach' });
+
   app.win.loadURL(`file://${__dirname}/sources/index.html`)
   // app.inspect()
 

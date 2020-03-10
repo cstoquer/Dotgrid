@@ -16,9 +16,9 @@ function Manager (client) {
   this.layers = []
 
   this.install = function () {
-    this.el.appendChild(this.layers[2] = document.createElementNS('http://www.w3.org/2000/svg', 'path'))
-    this.el.appendChild(this.layers[1] = document.createElementNS('http://www.w3.org/2000/svg', 'path'))
-    this.el.appendChild(this.layers[0] = document.createElementNS('http://www.w3.org/2000/svg', 'path'))
+    for (var i = 0; i < LAYERS_COUNT; i++) {
+      this.el.appendChild(this.layers[i] = document.createElementNS('http://www.w3.org/2000/svg', 'path'))
+    }
   }
 
   this.update = function () {

@@ -16,9 +16,10 @@
     <meta property="og:type" content="article" />
     <meta property="og:url" content="http://wiki.xxiivv.com/Dotgrid" />
     <meta property="og:image" content="https://hundredrabbits.github.io/Dotgrid/media/services/meta.jpg" />
-    <meta property="og:description" content="A minimalist vector graphics tool." /> 
+    <meta property="og:description" content="A minimalist vector graphics tool." />
     <meta property="og:site_name" content="Dotgrid" />
     <!-- Generics -->
+    <script type="text/javascript" src="scripts/constants.js"></script>
     <script type="text/javascript" src="scripts/lib/acels.js"></script>
     <script type="text/javascript" src="scripts/lib/theme.js"></script>
     <script type="text/javascript" src="scripts/lib/history.js"></script>
@@ -47,7 +48,7 @@
 
       client.install(document.body)
 
-      window.addEventListener('load', () => { 
+      window.addEventListener('load', () => {
         client.start()
         client.acels.inject('Dotgrid')
       })

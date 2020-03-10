@@ -5,32 +5,44 @@
 function Tool (client) {
   this.index = 0
   this.settings = { size: { width: 600, height: 300 } }
-  this.layers = [[], [], []]
-  this.styles = [
-    { thickness: 15, strokeLinecap: 'round', strokeLinejoin: 'round', color: '#f00', fill: 'none', mirror_style: 0, transform: 'rotate(45)' },
-    { thickness: 15, strokeLinecap: 'round', strokeLinejoin: 'round', color: '#0f0', fill: 'none', mirror_style: 0, transform: 'rotate(45)' },
-    { thickness: 15, strokeLinecap: 'round', strokeLinejoin: 'round', color: '#00f', fill: 'none', mirror_style: 0, transform: 'rotate(45)' }
-  ]
+  this.layers = [];
+  this.styles = [];
+  for (var i = 0; i < LAYERS_COUNT; i++) {
+    this.layers.push([]);
+    this.styles.push({
+      thickness: 15,
+      strokeLinecap: 'round',
+      strokeLinejoin: 'round',
+      color: COLORS[i],
+      fill: 'none',
+      mirror_style: 0,
+      transform: 'rotate(45)'
+    });
+  }
   this.vertices = []
   this.reqs = { line: 2, arc_c: 2, arc_r: 2, arc_c_full: 2, arc_r_full: 2, bezier: 3, close: 0 }
 
   this.start = function () {
-    this.styles[0].color = client.theme.active.f_high
-    this.styles[1].color = client.theme.active.f_med
-    this.styles[2].color = client.theme.active.f_low
+    for (var i = 0; i < LAYERS_COUNT; i++) {
+      this.styles[i].color = COLORS[i];
+    }
+    // this.styles[0].color = client.theme.active.f_high
+    // this.styles[1].color = client.theme.active.f_med
+    // this.styles[2].color = client.theme.active.f_low
   }
 
   this.erase = function () {
-    this.layers = [[], [], []]
+    this.layers = []
+    for (var i = 0; i < LAYERS_COUNT; i++) {
+      this.layers.push([]);
+    }
   }
 
   this.reset = function () {
-    this.styles[0].mirror_style = 0
-    this.styles[1].mirror_style = 0
-    this.styles[2].mirror_style = 0
-    this.styles[0].fill = 'none'
-    this.styles[1].fill = 'none'
-    this.styles[2].fill = 'none'
+    for (var i = 0; i < LAYERS_COUNT; i++) {
+      this.styles[i].mirror_style = 0
+      this.styles[i].fill = 'none'
+    }
     this.erase()
     this.vertices = []
     this.index = 0
@@ -55,7 +67,11 @@ function Tool (client) {
   }
 
   this.length = function () {
-    return this.layers[0].length + this.layers[1].length + this.layers[2].length
+    var length = 0;
+    for (var i = 0; i < LAYERS_COUNT; i++) {
+      length += this.layers[i].length;
+    }
+    return length
   }
 
   // I/O
@@ -73,7 +89,7 @@ function Tool (client) {
   }
 
   this.replace = function (dot) {
-    if (!dot.layers || dot.layers.length !== 3) { console.warn('Incompatible version'); return }
+    if (!dot.layers || dot.layers.length !== LAYERS_COUNT) { console.warn('Incompatible version'); return }
 
     if (dot.settings.width && dot.settings.height) {
       dot.settings.size = { width: dot.settings.width, height: dot.settings.height }
@@ -242,11 +258,11 @@ function Tool (client) {
   }
 
   this.paths = function () {
-    const l1 = new Generator(client.tool.layers[0], client.tool.styles[0]).toString({ x: 0, y: 0 }, 1)
-    const l2 = new Generator(client.tool.layers[1], client.tool.styles[1]).toString({ x: 0, y: 0 }, 1)
-    const l3 = new Generator(client.tool.layers[2], client.tool.styles[2]).toString({ x: 0, y: 0 }, 1)
-
-    return [l1, l2, l3]
+    var layers = [];
+    for (var i = 0; i < LAYERS_COUNT; i++) {
+      layers.push(new Generator(client.tool.layers[i], client.tool.styles[i]).toString({ x: 0, y: 0 }, 1));
+    }
+    return layers
   }
 
   this.path = function () {
@@ -316,6 +332,7 @@ function Tool (client) {
   }
 
   this.merge = function () {
+    // TODO
     const merged = [].concat(this.layers[0]).concat(this.layers[1]).concat(this.layers[2])
     this.erase()
     this.layers[this.index] = merged
@@ -344,7 +361,7 @@ function Tool (client) {
   }
 
   this.selectLayer = function (id) {
-    this.index = clamp(id, 0, 2)
+    this.index = clamp(id, 0, LAYERS_COUNT - 1)
     this.clear()
     client.renderer.update()
     client.interface.update(true)
@@ -352,12 +369,12 @@ function Tool (client) {
   }
 
   this.selectNextLayer = function () {
-    this.index = this.index >= 2 ? 0 : this.index++
+    this.index = this.index >= LAYERS_COUNT ? 0 : this.index++
     this.selectLayer(this.index)
   }
 
   this.selectPrevLayer = function () {
-    this.index = this.index >= 0 ? 2 : this.index--
+    this.index = this.index >= 0 ? LAYERS_COUNT : this.index--
     this.selectLayer(this.index)
   }
 
