@@ -48,14 +48,14 @@ function Interface (client) {
       for (const name in tools) {
         const tool = tools[name]
         html += `
-        <svg 
-          id="option_${name}" 
-          title="${capitalize(name)}" 
-          onmouseout="client.interface.out('${type}','${name}')" 
-          onmouseup="client.interface.up('${type}','${name}')" 
-          onmousedown="client.interface.down('${type}','${name}', event)" 
-          onmouseover="client.interface.over('${type}','${name}')" 
-          viewBox="0 0 300 300" 
+        <svg
+          id="option_${name}"
+          title="${capitalize(name)}"
+          onmouseout="client.interface.out('${type}','${name}')"
+          onmouseup="client.interface.up('${type}','${name}')"
+          onmousedown="client.interface.down('${type}','${name}', event)"
+          onmouseover="client.interface.over('${type}','${name}')"
+          viewBox="0 0 300 300"
           class="icon ${type}">
           <path id="${name}_path" class="icon_path" d="${tool.icon}"/>${name === 'depth' ? '<path class="icon_path inactive" d=""/>' : ''}
           <rect ar="${name}" width="300" height="300" opacity="0">
@@ -66,6 +66,7 @@ function Interface (client) {
     }
     this.menu_el.innerHTML = html
     this.menu_el.appendChild(client.picker.el)
+    this.menu_el.appendChild(client.layerSelector.el)
   }
 
   this.over = function (type, name) {

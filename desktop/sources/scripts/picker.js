@@ -47,7 +47,7 @@ function Picker (client) {
     this.input.blur()
     this.input.value = ''
 
-    try { client.controller.set() } catch (err) { console.log('No controller') }
+    // try { client.controller.set() } catch (err) { console.log('No controller') }
 
     setTimeout(() => { client.interface.update(true); client.renderer.update() }, 250)
   }

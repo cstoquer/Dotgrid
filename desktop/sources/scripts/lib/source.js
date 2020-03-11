@@ -15,6 +15,7 @@ function Source (client) {
 
   this.new = () => {
     console.log('Source', 'New file..')
+    // FIXME: doesn't actually reset the document
     this.cache = {}
   }
 

@@ -34,6 +34,42 @@ body { padding: 0px; font-family: 'input_mono_regular'; -webkit-user-select: non
 #interface.picker #option_mirror { opacity: 0 !important }
 #interface.picker #option_fill { opacity: 0 !important }
 
+#layers {
+  position: relative;
+  transition: opacity 250ms;
+  display: inline-block;
+  border-radius: 24px;
+  vertical-align: top;
+  height: 24px;
+  padding: 2px;
+  margin: 0 10px;
+  border: solid 1px var(--b_med);
+}
+
+.layer {
+  height: 22px;
+  width: 22px;
+  margin: 1px;
+  border-radius: 22px;
+  display: inline-block;
+  background-color: #ffb545;
+  color: var(--background);
+  text-align: center;
+  line-height: 23px;
+  vertical-align: top;
+  font-weight: bold;
+}
+
+#selector {
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  border: solid 2px var(--f_med);
+  border-radius: 24px;
+  margin-top: -2px;
+  transition: left 100ms;
+}
+
 /* Web Specific */
 
 body.web #interface #menu #option_open { display: none; }
@@ -46,5 +82,9 @@ body #interface { opacity: 0; transition: opacity 250ms, bottom 500ms; bottom:15
 body.ready #interface { opacity: 1; bottom:30px; }
 
 @media (max-width: 560px) {
-  #interface #menu svg.icon.source { opacity: 0; } 
+  #interface #menu svg.icon.source { opacity: 0; }
+}
+
+@media (max-width: 779px) {
+  #layers { opacity: 0; }
 }

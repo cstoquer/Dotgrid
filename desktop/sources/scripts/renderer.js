@@ -245,7 +245,7 @@ function Renderer (client) {
     this.context.beginPath()
     this.context.lineWidth = 3
     this.context.lineCap = 'round'
-    this.context.arc(Math.abs(pos.x * -this.scale), Math.abs(pos.y * this.scale), clamp(radius, 5, 100), 0, 2 * Math.PI, false)
+    this.context.arc(Math.abs(pos.x * -this.scale), Math.abs(pos.y * this.scale), clamp(radius, 5, MAX_THICKNESS), 0, 2 * Math.PI, false)
     this.context.strokeStyle = client.theme.active.f_med
     this.context.stroke()
     this.context.closePath()

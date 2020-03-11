@@ -3,3 +3,4 @@ const COLORS = [
   "#372538", "#e14141", "#ffbf36", "#fff275", "#bf3fb3",
   "#83e04c", "#39855a", "#3898ff", "#6eeeff", "#b2bcc2",
 ];
+const MAX_THICKNESS = 200;

@@ -26,9 +26,6 @@ function Tool (client) {
     for (var i = 0; i < LAYERS_COUNT; i++) {
       this.styles[i].color = COLORS[i];
     }
-    // this.styles[0].color = client.theme.active.f_high
-    // this.styles[1].color = client.theme.active.f_med
-    // this.styles[2].color = client.theme.active.f_low
   }
 
   this.erase = function () {
@@ -205,7 +202,7 @@ function Tool (client) {
     } else if (type === 'fill') {
       this.style().fill = this.style().fill === 'none' ? this.style().color : 'none'
     } else if (type === 'thickness') {
-      this.style().thickness = clamp(this.style().thickness + mod, 1, 100)
+      this.style().thickness = clamp(this.style().thickness + mod, 1, MAX_THICKNESS)
     } else if (type === 'mirror') {
       this.style().mirror_style = this.style().mirror_style > 2 ? 0 : this.style().mirror_style + 1
     } else {
@@ -371,9 +368,9 @@ function Tool (client) {
   // Style
 
   this.style = function () {
-    if (!this.styles[this.index]) {
-      this.styles[this.index] = []
-    }
+    // if (!this.styles[this.index]) {
+    //   this.styles[this.index] = []
+    // }
     return this.styles[this.index]
   }
 
@@ -391,7 +388,22 @@ function Tool (client) {
     this.clear()
     client.renderer.update()
     client.interface.update(true)
-    console.log(`layer:${this.index}`)
+    // console.log(`layer:${this.index}`)
+    client.layerSelector.update()
+  }
+
+  function swapInArray(arr, i, j) {
+    let temp = arr[i]
+    arr[i] = arr[j]
+    arr[j] = temp
+  }
+
+  this.moveLayer = function (increment) {
+    const newIndex  = this.index + increment;
+    if (newIndex < 0 || newIndex >= LAYERS_COUNT) return;
+    swapInArray(this.layers, this.index, newIndex)
+    swapInArray(this.styles, this.index, newIndex)
+    this.selectLayer(newIndex)
   }
 
   this.selectNextLayer = function () {
