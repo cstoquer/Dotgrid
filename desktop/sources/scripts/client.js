@@ -45,7 +45,7 @@ function Client () {
     window.addEventListener('dragover', (e) => { e.stopPropagation(); e.preventDefault(); e.dataTransfer.dropEffect = 'copy' })
     window.addEventListener('drop', this.onDrop)
 
-    this.acels.set('File', 'New', 'CmdOrCtrl+N', () => { this.source.new() })
+    this.acels.set('File', 'New', 'CmdOrCtrl+N', () => { this.tool.reset(); this.source.new() })
     this.acels.set('File', 'Open', 'CmdOrCtrl+O', () => { this.source.open('grid', this.whenOpen) })
     this.acels.set('File', 'Save', 'CmdOrCtrl+S', () => { this.source.saveGrid(this.tool.export()) })
     this.acels.set('File', 'Save', 'CmdOrCtrl+Shift+S', () => { this.source.saveGridAs(this.tool.export()) })

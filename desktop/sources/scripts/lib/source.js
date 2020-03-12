@@ -19,7 +19,6 @@ function Source (client) {
   }
 
   this.new = () => {
-    // FIXME: it doesn't actually reset the document
     this.state.gridFilePath = ''
     this.state.svgFilePath = ''
     this.cache = {}
