@@ -29,6 +29,7 @@ function Client () {
     this.interface = new Interface(this)
     this.picker = new Picker(this)
     this.layerSelector = new LayerSelector(this)
+    this.tooltip = new Tooltip(this)
     this.cursor = new Cursor(this)
 
     host.appendChild(this.renderer.el)
@@ -46,9 +47,11 @@ function Client () {
 
     this.acels.set('File', 'New', 'CmdOrCtrl+N', () => { this.source.new() })
     this.acels.set('File', 'Open', 'CmdOrCtrl+O', () => { this.source.open('grid', this.whenOpen) })
-    this.acels.set('File', 'Save', 'CmdOrCtrl+S', () => { this.source.write('dotgrid', 'grid', this.tool.export(), 'text/plain') })
-    this.acels.set('File', 'Export Vector', 'CmdOrCtrl+E', () => { this.source.write('dotgrid', 'svg', this.manager.toString(), 'image/svg+xml') })
-    this.acels.set('File', 'Export Image', 'CmdOrCtrl+Shift+E', () => { this.manager.toPNG(this.tool.settings.size, (dataUrl) => { this.source.write('dotgrid', 'png', dataUrl, 'image/png') }) })
+    this.acels.set('File', 'Save', 'CmdOrCtrl+S', () => { this.source.saveGrid(this.tool.export()) })
+    this.acels.set('File', 'Save', 'CmdOrCtrl+Shift+S', () => { this.source.saveGridAs(this.tool.export()) })
+    this.acels.set('File', 'Export Vector', 'CmdOrCtrl+E', () => { this.source.saveSvg(this.manager.toString()) })
+    this.acels.set('File', 'Export Vector', 'CmdOrCtrl+Shift+E', () => { this.source.saveSvgAs(this.manager.toString()) })
+    this.acels.set('File', 'Export Image', 'CmdOrCtrl+Shift+R', () => { this.manager.toPNG(this.tool.settings.size, (dataUrl) => { this.source.write('dotgrid', 'png', dataUrl, 'image/png') }) })
     this.acels.set('History', 'Undo', 'CmdOrCtrl+Z', () => { this.tool.undo() })
     this.acels.set('History', 'Redo', 'CmdOrCtrl+Shift+Z', () => { this.tool.redo() })
     this.acels.set('Stroke', 'Line', 'X', () => { this.tool.cast('line') })
@@ -218,7 +221,7 @@ function Client () {
     const file = e.dataTransfer.files[0]
 
     if (file.name.indexOf('.grid') > -1) {
-      this.source.read(e.dataTransfer.files[0], this.whenOpen)
+      this.source.read(file, this.whenOpen)
     }
   }
 

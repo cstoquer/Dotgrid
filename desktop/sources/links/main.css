@@ -70,6 +70,17 @@ body { padding: 0px; font-family: 'input_mono_regular'; -webkit-user-select: non
   transition: left 100ms;
 }
 
+#tooltip {
+  position: absolute;
+  bottom: 5px;
+  left: 30px;
+  height: 20px;
+  width: calc(100vw - 60px);
+  color: var(--b_med);
+  font-weight: bold;
+  font-size: 12px;
+}
+
 /* Web Specific */
 
 body.web #interface #menu #option_open { display: none; }

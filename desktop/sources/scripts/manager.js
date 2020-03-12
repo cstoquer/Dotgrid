@@ -95,7 +95,8 @@ function Manager (client) {
     const styles = client.tool.styles
     const paths  = client.tool.paths(-bbox.l, -bbox.t)
 
-    for (var i = 0; i < LAYERS_COUNT; i++) {
+    // NOTA: last layer is the guide and is not exported
+    for (var i = 0; i < LAYERS_COUNT - 1; i++) {
       const style = styles[i]
       const path  = paths[i]
       if (!path) continue;

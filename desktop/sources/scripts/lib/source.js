@@ -1,10 +1,15 @@
 'use strict'
 
+const fs = require('fs');
+const path = require('path');
+const dialog = require('electron').remote.dialog;
+
 /* global FileReader */
 /* global MouseEvent */
 
 function Source (client) {
   this.cache = {}
+  this.state = {}
 
   this.install = () => {
   }
@@ -14,13 +19,14 @@ function Source (client) {
   }
 
   this.new = () => {
-    console.log('Source', 'New file..')
-    // FIXME: doesn't actually reset the document
+    // FIXME: it doesn't actually reset the document
+    this.state.gridFilePath = ''
+    this.state.svgFilePath = ''
     this.cache = {}
+    client.tooltip.push('New file.')
   }
 
   this.open = (ext, callback, store = false) => {
-    console.log('Source', 'Open file..')
     const input = document.createElement('input')
     input.type = 'file'
     input.onchange = (e) => {
@@ -32,7 +38,7 @@ function Source (client) {
   }
 
   this.load = (ext, callback) => {
-    console.log('Source', 'Load files..')
+    client.tooltip.push('Load file.')
     const input = document.createElement('input')
     input.type = 'file'
     input.setAttribute('multiple', 'multiple')
@@ -67,6 +73,18 @@ function Source (client) {
       const res = event.target.result
       if (callback) { callback(file, res) }
       if (store) { this.store(file, res) }
+
+      if (file.path) {
+        this.state.gridFilePath = file.path;
+        client.tooltip.push('File: ' + file.path)
+      }
+
+      try {
+        const data = JSON.parse(res)
+        if (data.meta && data.meta.svgPath) {
+          this.state.svgFilePath = data.meta.svgPath
+        }
+      } catch (e) {}
     }
     reader.readAsText(file, 'UTF-8')
   }
@@ -80,6 +98,77 @@ function Source (client) {
       link.setAttribute('href', 'data:' + type + ';' + settings + ',' + encodeURIComponent(content))
     }
     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }))
+  }
+
+  function writeFile(filePath, content) {
+    fs.writeFile(filePath, content, (error) => {
+      if (error) return client.tooltip.push('Error: ' + error.message)
+      client.tooltip.push('Save: ' + filePath)
+    })
+  }
+
+  this.addGridMeta = (content) => {
+    if (!this.state.svgFilePath) return content
+    try {
+      const data = JSON.parse(content)
+      data.meta = { svgPath: this.state.svgFilePath }
+      return JSON.stringify(data, null, 2)
+    } catch (e) {
+      return content
+    }
+  }
+
+  this.saveGrid = (content) => {
+    if (this.state.gridFilePath) {
+      content = this.addGridMeta(content)
+      return writeFile(this.state.gridFilePath, content)
+    }
+    this.saveGridAs(content)
+  }
+
+  this.saveGridAs = (content) => {
+    content = this.addGridMeta(content)
+
+    const options = {
+      filters: [{ name:'Grid File', extensions: ['grid'] }]
+    }
+
+    dialog.showSaveDialog(null, options).then((result) => {
+      if (!result || !result.filePath) return;
+      let filePath = result.filePath
+
+      if (path.extname(filePath) !== '.grid') {
+        filePath += '.grid'
+      }
+
+      this.state.gridFilePath = filePath;
+      writeFile(filePath, content)
+    });
+  }
+
+  this.saveSvg = (content) => {
+    if (this.state.svgFilePath) {
+      return writeFile(this.state.svgFilePath, content)
+    }
+    this.saveSvgAs(content)
+  }
+
+  this.saveSvgAs = (content) => {
+    const options = {
+      filters: [{ name:'SVG File', extensions: ['svg'] }]
+    }
+
+    dialog.showSaveDialog(null, options).then((result) => {
+      if (!result || !result.filePath) return;
+      var filePath = result.filePath
+
+      if (path.extname(filePath) !== '.svg') {
+        filePath += '.svg'
+      }
+
+      this.state.svgFilePath = filePath;
+      writeFile(filePath, content)
+    });
   }
 
   function timestamp (d = new Date(), e = new Date(d)) {
