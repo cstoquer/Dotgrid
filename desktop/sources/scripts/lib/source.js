@@ -18,11 +18,24 @@ function Source (client) {
     this.new()
   }
 
-  this.new = () => {
+  this.clear = () => {
     this.state.gridFilePath = ''
     this.state.svgFilePath = ''
+  }
+
+  this.new = () => {
+    this.clear()
     this.cache = {}
     client.tooltip.push('New file.')
+  }
+
+  this.info = () => {
+    const gridFilePath = this.state.gridFilePath
+    if (gridFilePath) {
+      client.tooltip.push(`File: ${gridFilePath}`)
+    } else {
+      client.tooltip.push('Unsaved file.')
+    }
   }
 
   this.open = (ext, callback, store = false) => {
@@ -73,6 +86,8 @@ function Source (client) {
       if (callback) { callback(file, res) }
       if (store) { this.store(file, res) }
 
+      this.clear()
+
       if (file.path) {
         this.state.gridFilePath = file.path;
         client.tooltip.push('File: ' + file.path)
@@ -83,7 +98,9 @@ function Source (client) {
         if (data.meta && data.meta.svgPath) {
           this.state.svgFilePath = data.meta.svgPath
         }
-      } catch (e) {}
+      } catch (e) {
+        this.state.svgFilePath = ''
+      }
     }
     reader.readAsText(file, 'UTF-8')
   }
@@ -132,6 +149,10 @@ function Source (client) {
       filters: [{ name:'Grid File', extensions: ['grid'] }]
     }
 
+    if (this.state.gridFilePath) {
+      options.defaultPath = this.state.gridFilePath
+    }
+
     dialog.showSaveDialog(null, options).then((result) => {
       if (!result || !result.filePath) return;
       let filePath = result.filePath
@@ -155,6 +176,10 @@ function Source (client) {
   this.saveSvgAs = (content) => {
     const options = {
       filters: [{ name:'SVG File', extensions: ['svg'] }]
+    }
+
+    if (this.state.gridFilePath) {
+      options.defaultPath = path.basename(this.state.gridFilePath, '.grid')
     }
 
     dialog.showSaveDialog(null, options).then((result) => {

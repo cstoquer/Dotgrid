@@ -59,6 +59,7 @@ function Picker (client) {
 
     client.tool.style().color = hex
     client.tool.style().fill = client.tool.style().fill !== 'none' ? hex : 'none'
+    client.layerSelector.update()
 
     this.stop()
   }

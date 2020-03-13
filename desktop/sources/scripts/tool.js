@@ -202,7 +202,9 @@ function Tool (client) {
     } else if (type === 'fill') {
       this.style().fill = this.style().fill === 'none' ? this.style().color : 'none'
     } else if (type === 'thickness') {
-      this.style().thickness = clamp(this.style().thickness + mod, 1, MAX_THICKNESS)
+      const thickness = clamp(this.style().thickness + mod, 1, MAX_THICKNESS)
+      this.style().thickness = thickness
+      client.tooltip.push(`Thickness: ${thickness}`)
     } else if (type === 'mirror') {
       this.style().mirror_style = this.style().mirror_style > 2 ? 0 : this.style().mirror_style + 1
     } else {
@@ -414,6 +416,11 @@ function Tool (client) {
   this.selectPrevLayer = function () {
     this.index = this.index >= 0 ? LAYERS_COUNT : this.index--
     this.selectLayer(this.index)
+  }
+
+  this.info = function () {
+    const style = this.styles[this.index]
+    client.tooltip.push(`Thickness: ${style.thickness}`)
   }
 
   function copy (data) { return data ? JSON.parse(JSON.stringify(data)) : [] }
