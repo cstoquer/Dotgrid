@@ -118,7 +118,7 @@ function Color (client) {
 	this.el.id = 'color'
 	this.color = new HSV(0, 0, 0)
 
-	this.el.innerHTML = require('./scripts/color.html')
+	this.el.innerHTML = require('./color.html')
 	document.body.appendChild(this.el)
 	this.el.style.display = 'none'
 
@@ -201,7 +201,10 @@ function Color (client) {
 
 	this.close = function () {
 		this.el.style.display = 'none'
-		client.tool.style().color = this.color.hex()
+		const style = client.tool.style()
+		const hex = this.color.hex()
+		style.color = hex
+		style.fill = style.fill !== 'none' ? hex : 'none'
 	}
 
 	this.update = function () {
@@ -214,7 +217,10 @@ function Color (client) {
 		this.alphaSlider.style.left = 4 + this.color.a * 352 + 'px'
 		this.aplhaColor.style.background = `linear-gradient(to right, rgba(${r},${g},${b},0) 0%, rgb(${r},${g},${b}) 100%)`
 
-		client.tool.style().color = this.color.hex()
+		const style = client.tool.style()
+		const hex = this.color.hex()
+		style.color = hex
+		style.fill = style.fill !== 'none' ? hex : 'none'
 		client.layerSelector.update()
 	}
 }
