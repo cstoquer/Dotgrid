@@ -31,6 +31,7 @@ function Client () {
     this.layerSelector = new LayerSelector(this)
     this.tooltip = new Tooltip(this)
     this.cursor = new Cursor(this)
+    this.color = new Color(this)
 
     host.appendChild(this.renderer.el)
 
@@ -92,7 +93,7 @@ function Client () {
     this.acels.set('Layers', 'Move Layer to Back', 'CmdOrCtrl+Left', () => { this.tool.moveLayer(-1) })
     this.acels.set('Layers', 'Merge Layers', 'CmdOrCtrl+M', () => { this.tool.merge() })
     this.acels.set('Layers', 'Layer Informations', 'T', () => { this.tool.info() })
-    this.acels.set('View', 'Color Picker', 'G', () => { this.picker.start() })
+    this.acels.set('View', 'Color Picker', 'G', () => { this.color.toggle() })
     this.acels.set('View', 'Toggle Grid', 'H', () => { this.renderer.toggle() })
     this.acels.install(window)
     this.acels.pipe(this)

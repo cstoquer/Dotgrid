@@ -19,6 +19,13 @@
     <meta property="og:description" content="A minimalist vector graphics tool." />
     <meta property="og:site_name" content="Dotgrid" />
     <!-- Generics -->
+    <script>
+      const fs = require('fs')
+      const path = require('path')
+      require.extensions['.html'] = function (module, filename) {
+          module.exports = fs.readFileSync(filename, 'utf8')
+      }
+    </script>
     <script type="text/javascript" src="scripts/constants.js"></script>
     <script type="text/javascript" src="scripts/lib/acels.js"></script>
     <script type="text/javascript" src="scripts/lib/theme.js"></script>
@@ -35,11 +42,13 @@
     <script type="text/javascript" src="scripts/picker.js"></script>
     <script type="text/javascript" src="scripts/layer.js"></script>
     <script type="text/javascript" src="scripts/tooltip.js"></script>
+    <script type="text/javascript" src="scripts/color.js"></script>
     <!-- Styles -->
     <link rel="stylesheet" type="text/css" href="links/reset.css"/>
     <link rel="stylesheet" type="text/css" href="links/fonts.css"/>
     <link rel="stylesheet" type="text/css" href="links/main.css"/>
     <link rel="stylesheet" type="text/css" href="links/theme.css"/>
+    <link rel="stylesheet" type="text/css" href="links/color.css"/>
     <title>Dotgrid</title>
   </head>
   <body class='web'>

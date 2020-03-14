@@ -1,0 +1,100 @@
+#color {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+    justify-content: center;
+}
+
+.colorPicker-container {
+	display: block;
+	background-color: var(--b_low);
+	padding: 10px;
+	border-radius: 10px;
+}
+
+.colorPicker {
+	width: 360px;
+	height: 150px;
+	margin-top: 2px;
+	border-radius: 3px;
+}
+
+.colorPicker-2d {
+	position: absolute;
+	width: 360px;
+	height: 150px;
+	border-radius: 3px;
+}
+
+.colorPicker-1d {
+	width: 360px;
+	height: 20px;
+	position: relative;
+	border-radius: 3px;
+}
+
+.colorPicker-saturationGradient {
+	background: linear-gradient(to right, #fff 0%, rgba(255,255,255,0) 100%);
+}
+
+.colorPicker-luminosityGradient {
+	background: linear-gradient(to bottom, transparent 0%, #000 100%);
+}
+
+.colorPicker-hueGradient {
+	background: linear-gradient(to right, red 0%, #ff0 17%, lime 33%, cyan 50%, blue 66%, #f0f 83%, red 100%);
+	margin: 7px 0;
+}
+
+.colorPicker-alpha {
+	margin: 0;
+	position: absolute;
+}
+
+.colorPicker-pointer {
+	position: relative;
+	width: 10px;
+	height: 10px;
+	transform: translate(-50%, -50%);
+	border-radius: 10px;
+	border: 2px solid black;
+}
+
+.colorPicker-pointerIn {
+	width: 8px;
+	height: 8px;
+	border-radius: 8px;
+	border: 1px solid white;
+}
+
+.colorPicker-slider {
+	position: relative;
+	width: 5px;
+	transform: translate(-50%, -3px);
+	border-radius: 10px;
+	border: 2px solid black;
+}
+
+.colorPicker-sliderIn {
+	width: 3px;
+	height: 20px;
+	border: 1px solid white;
+	border-radius: 10px;
+}
+
+.colorPicker-swatch {
+	width: 32px;
+}
+
+.colorPicker-swatchColor {
+	border-radius: 4px;
+	width: 30px;
+	height: 30px;
+	margin: 0;
+	border: solid 1px #fff;
+}
