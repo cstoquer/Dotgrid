@@ -84,23 +84,24 @@ function Manager (client) {
     callback(URL.createObjectURL(file), 'export.grid')
   }
 
-  this.toString = () => {
+  this.toString = (scale = 1) => {
     // return new XMLSerializer().serializeToString(this.el)
     let xml = ''
 
     const bbox   = client.tool.boundingBox();
     // TODO: process mirrors
-    const width  = bbox.r - bbox.l;
-    const height = bbox.b - bbox.t;
+    const width  = (bbox.r - bbox.l) * scale;
+    const height = (bbox.b - bbox.t) * scale;
     const styles = client.tool.styles
-    const paths  = client.tool.paths(-bbox.l, -bbox.t)
+    const paths  = client.tool.paths(-bbox.l, -bbox.t, scale)
 
     // NOTA: last layer is the guide and is not exported
     for (var i = 0; i < LAYERS_COUNT - 1; i++) {
       const style = styles[i]
       const path  = paths[i]
       if (!path) continue;
-      xml += `<path d="${path}" style="stroke-width: ${style.thickness}; stroke-linecap: ${style.strokeLinecap}; stroke-linejoin: ${style.strokeLinejoin}; stroke: ${style.color}; fill: ${style.fill};"/>`
+      const thickness = style.thickness * scale
+      xml += `<path d="${path}" style="stroke-width: ${thickness}; stroke-linecap: ${style.strokeLinecap}; stroke-linejoin: ${style.strokeLinejoin}; stroke: ${style.color}; fill: ${style.fill};"/>`
     }
 
     return `<svg xmlns="http://www.w3.org/2000/svg" baseProfile="full" version="1.1" width="${width}px" height="${height}px">${xml}</svg>`

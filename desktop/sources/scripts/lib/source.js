@@ -166,14 +166,25 @@ function Source (client) {
     });
   }
 
-  this.saveSvg = (content) => {
+  this.saveSvg = () => {
     if (this.state.svgFilePath) {
+
+      if (Array.isArray(this.state.svgFilePath)) {
+        for (let i = 0; i < this.state.svgFilePath.length; i++) {
+          const config = this.state.svgFilePath[i];
+          writeFile(config.path, client.manager.toString(config.scale))
+        }
+        client.tooltip.push(`Exported ${this.state.svgFilePath.length} SVG files.`)
+        return;
+      }
+
+      const content = client.manager.toString()
       return writeFile(this.state.svgFilePath, content)
     }
-    this.saveSvgAs(content)
+    this.saveSvgAs()
   }
 
-  this.saveSvgAs = (content) => {
+  this.saveSvgAs = () => {
     const options = {
       filters: [{ name:'SVG File', extensions: ['svg'] }]
     }
@@ -191,6 +202,7 @@ function Source (client) {
       }
 
       this.state.svgFilePath = filePath;
+      const content = client.manager.toString()
       writeFile(filePath, content)
     });
   }

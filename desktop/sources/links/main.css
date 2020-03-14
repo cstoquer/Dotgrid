@@ -73,7 +73,7 @@ body { padding: 0px; font-family: 'input_mono_regular'; -webkit-user-select: non
 #tooltip {
   position: absolute;
   bottom: 5px;
-  left: 30px;
+  left: 40px;
   height: 20px;
   width: calc(100vw - 60px);
   color: var(--b_med);

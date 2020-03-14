@@ -256,10 +256,10 @@ function Tool (client) {
     return this.vertices.length >= this.reqs[type]
   }
 
-  this.paths = function (x = 0, y = 0) {
+  this.paths = function (x = 0, y = 0, scale = 1) {
     var layers = [];
     for (var i = 0; i < LAYERS_COUNT; i++) {
-      layers.push(new Generator(client.tool.layers[i], client.tool.styles[i]).toString({ x, y }, 1));
+      layers.push(new Generator(client.tool.layers[i], client.tool.styles[i]).toString({ x, y }, scale));
     }
     return layers
   }
@@ -420,7 +420,8 @@ function Tool (client) {
 
   this.info = function () {
     const style = this.styles[this.index]
-    client.tooltip.push(`Thickness: ${style.thickness}`)
+    const pos = client.cursor.pos
+    client.tooltip.push(`Position: (${pos.x / 15}, ${pos.y / 15}) | Thickness: ${style.thickness}`)
   }
 
   function copy (data) { return data ? JSON.parse(JSON.stringify(data)) : [] }
