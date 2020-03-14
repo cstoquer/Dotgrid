@@ -202,7 +202,7 @@ function Tool (client) {
     } else if (type === 'fill') {
       this.style().fill = this.style().fill === 'none' ? this.style().color : 'none'
     } else if (type === 'thickness') {
-      const thickness = clamp(this.style().thickness + mod, 1, MAX_THICKNESS)
+      const thickness = clamp(this.style().thickness + mod, 0, MAX_THICKNESS)
       this.style().thickness = thickness
       client.tooltip.push(`Thickness: ${thickness}`)
     } else if (type === 'mirror') {
